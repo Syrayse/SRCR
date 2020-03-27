@@ -1,6 +1,8 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Ficheiro que define a entidade Adjucataria
 % E todo o comportamento esperado.
+% descrito como:
+% $ adjudicataria(Nome,NIF,Morada).
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Consultar os utensilios.
 :- [utils].

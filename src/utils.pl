@@ -60,6 +60,11 @@ demo(Q,falso) :-
 demo(Q,desconhecido) :-
 	nao(Q),
 	nao(-Q).
+%--------------------------------- - - - - - - - - - -  -
+% Extensao do predicado membro
+
+membro(X,[X|_]) :- !.
+membro(X,[_|T]) :- membro(X,T).
 
 %--------------------------------- - - - - - - - - - -  -
 
