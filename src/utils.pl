@@ -1,16 +1,5 @@
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Ficheiro com definição de predicados úteis.
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% SICStus PROLOG: Declaracoes iniciais
-
-:- set_prolog_flag( discontiguous_warnings,off ).
-:- set_prolog_flag( single_var_warnings,off ).
-:- set_prolog_flag( unknown,fail ).
-
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% SICStus PROLOG: definicoes iniciais
-
-:- op( 900,xfy,'::' ).
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
 % Extensão do predicado que permite a evolucao do conhecimento
