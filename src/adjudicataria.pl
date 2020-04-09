@@ -9,16 +9,18 @@
 :- dynamic adjudicataria/3.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Regras.
+% Getters e Operações.
 
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Invariantes.
+% Dado um NIF coloca em R todos os adjudicatarios com esse id.
+getAdjudicatario(NIF,R) :-
+	solucoes(adjudicataria(NOME,NIF,MORADA),
+			 adjudicataria(NOME,NIF,MORADA),
+			 R).
 
-% Um NIF não pode ser repetido
-+adjudicataria(_,NIF,_) ::
-	(findall( Nome, (adjudicataria(Nome,NIF,_)), S),
-	length(S,N), N =< 1).
+% Insere na base de conhecimento um novo adjudicante.
+addAdjudicatario(Nome,NIF,Morada) :-
+	evolucao(adjudicataria(Nome,NIF,Morada)).
 
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
-
-getAdria(NIF,R) :- findall(adjudicataria(N,NIF,M),adjudicataria(N,NIF,M),R).
+% Remove da base de conhecimento o adjudicante indicado.
+remAdjudicatario(Nome,NIF,Morada) :-
+	involucao(adjudicataria(Nome,NIF,Morada)).

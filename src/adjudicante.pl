@@ -7,17 +7,24 @@
 :- dynamic adjudicante/3.
 
 %--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Regras.
+% Getters e Operações.
 
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
-% Invariantes.
+% Dado um NIF coloca em R todos os adjudicantes com esse id.
+getAdjudicante(NIF,R) :-
+	solucoes(adjudicante(NOME,NIF,MORADA),
+			 adjudicante(NOME,NIF,MORADA),
+			 R).
 
-% Um NIF não pode ser repetido
-+adjudicante(_,NIF,_) ::
-	(findall( Nome, (adjudicante(Nome,NIF,_)), S),
-	length(S,N), N =< 1).
+% Dado um Nome, coloca em R todos os adjudicantes come esse nome.
+getAdjudicanteNome(Nome,R) :-
+	solucoes(adjudicante(Nome,NIF,MORADA),
+			 adjudicante(Nome,NIF,MORADA),
+			 R).
 
-%--------------------------------- - - - - - - - - - -  -  -  -  -   -
+% Insere na base de conhecimento um novo adjudicante.
+addAdjudicante(Nome,NIF,Morada) :-
+	evolucao(adjudicante(Nome,NIF,Morada)).
 
-getAdte(NIF,R) :- findall(adjudicante(N,NIF,M),adjudicante(N,NIF,M),R).
-
+% Remove da base de conhecimento o adjudicante indicado.
+remAdjudicante(Nome,NIF,Morada) :-
+	involucao(adjudicante(Nome,NIF,Morada)).
