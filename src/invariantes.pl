@@ -18,41 +18,6 @@
 % dos dados, nomeadamente, a evitar a repeticao de conhe-
 % cimento, contratos com o mesmo id, etc ...
 
-% Predicado utilizado para verificar se existe 1, ou
-% nenhuma entidade com um determinado NIF.
-validaEntidade(NIF) :-
-	solucoes(NIF1,
-		(NIF == NIF1,
-		(pessoa(NIF1,_,_) ;
-		 empresa(NIF1,_,_))), R),
-	comprimento(R,N),
-	N =< 1. %>
-
-% Predicado utilizado para verificar se existe 1 entidade
-% com 1 determinado NIF.
-existeEntidade(NIF) :- 
-	solucoes(NIF1,
-		(NIF == NIF1,
-		(pessoa(NIF1,_,_) ;
-		 empresa(NIF1,_,_))), R),
-	comprimento(R,N),
-	N == 1.
-
-% Predicado utilizado para verificar se existe 1 pessoa
-% com 1 determinado NIF.
-existePessoa(NIF) :-
-	solucoes(NIF1,
-		(NIF == NIF1, pessoa(NIF1,_,_)), R),
-	comprimento(R,1).
-
-% Predicado utilizado para verificar se existe 1 ou 0 inabi-
-% litado com 1 determinado NIF.
-validaInabilitado(NIF) :-
-	solucoes(NIF,
-		(inabilitado(NIF)), R),
-	comprimento(R,N),
-	N =< 1. % >
-
 % 1) Pessoa.
 
 % ---- 1) So pode existir um NIF unico, partilhado entre
