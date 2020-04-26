@@ -58,6 +58,11 @@ getEmpresaCrime(NIF,Data,R) :-
 cumprePena(NIF,Data) :-
 	crime(NIF, Di, Df), Data @>= Di, Data @=< Df.
 
+% ---- 2) Recebe NIF e Data, indica se o NIF indicado esta
+% a cumprir interdicao.
+cumpreInterdicao(NIF, Data) :-
+	interdito(NIF, Di, Df), Data @>= Di, Data @=< Df.
+
 % ---- 2) Recebe NIF, retorna todas os crimes associados
 % a esse NIF.
 getCrime(NIF,R) :-
@@ -85,7 +90,7 @@ getInterdito(NIF,R) :-
 getInterditoData(NIF,Data,R) :-
 	solucoes( interdito(NIF,Di,Df),
 			( interdito(NIF,Di,Df) , 
-			  cumprePena(NIF,Data)), R).
+			  cumpreInterdicao(NIF,Data)), R).
 
 % 5) Inabilitado.
 
@@ -188,6 +193,9 @@ filha(X,Y) :- subempresa(Z,Y), filhaAux(X,Y,Z).
 filhaAux(X,Y,X).
 filhaAux(X,Y,Z) :-
 	subempresa(W,Z), filhaAux(X,Y,W).
+
+% ---- 4.3) Verifica se empresa X e da familia de Y.
+familia(X,Y) :- filha(X,Y) ; mae(X,Y).
 
 % ---- 5) Recebe NIF de empresa e data, e retorna todas as 
 % empresas da familia desta que estejam a cumprir pena.
