@@ -18,24 +18,60 @@
 % dos dados, nomeadamente, a evitar a repeticao de conhe-
 % cimento, contratos com o mesmo id, etc ...
 
-% Predicado utilizado para verificar se existe entidade
-% com um determinado nome.
-existeEntidade(NIF) :-
-	getPessoa(NIF,R1),
-	getEmpresa(NIF,R2),
-	comprimento(R1,N1),
-	comprimento(R1,N2),
-	N1 + N2 is 1.
+% Predicado utilizado para verificar se existe 1, ou
+% nenhuma entidade com um determinado NIF.
+validaEntidade(NIF) :-
+	solucoes(NIF1,
+		(NIF == NIF1,
+		(pessoa(NIF1,_,_) ;
+		 empresa(NIF1,_,_))), R),
+	comprimento(R,N),
+	N =< 1. %>
+
+% Predicado utilizado para verificar se existe 1 entidade
+% com 1 determinado NIF.
+existeEntidade(NIF) :- 
+	solucoes(NIF1,
+		(NIF == NIF1,
+		(pessoa(NIF1,_,_) ;
+		 empresa(NIF1,_,_))), R),
+	comprimento(R,N),
+	N == 1.
+
+% Predicado utilizado para verificar se existe 1 pessoa
+% com 1 determinado NIF.
+existePessoa(NIF) :-
+	solucoes(NIF1,
+		(NIF == NIF1, pessoa(NIF1,_,_)), R),
+	comprimento(R,1).
+
+% Predicado utilizado para verificar se existe 1 ou 0 inabi-
+% litado com 1 determinado NIF.
+validaInabilitado(NIF) :-
+	solucoes(NIF,
+		(inabilitado(NIF)), R),
+	comprimento(R,N),
+	N =< 1. % >
 
 % 1) Pessoa.
 
 % ---- 1) So pode existir um NIF unico, partilhado entre
 % pessoas e empresas.
-+pessoa(NIF,_,_)::(existeEntidade(NIF)).
++pessoa(_,_,_)::(
+	solucoes(NIF,
+		((pessoa(NIF,_,_) ,
+		 empresa(NIF,_,_))),R),
+	comprimento(R,0)).
+
++pessoa(NIF,_,_)::(
+	solucoes(NIF,
+		(pessoa(NIF,_,_)),R),
+	comprimento(R,1)).
+
 
 % ---- 2) Nao se pode remover uma pessoa se esta tiver
 % envolvida em crimes, interdicoes, inabilitacoes, contra-
-% tos ou administracoes.
+% tos ou administracoes ou for fiscal.
 -pessoa(NIF,_,_)::(
 	solucoes(NIF,
 		(crime(NIF,_,_);
@@ -43,14 +79,24 @@ existeEntidade(NIF) :-
 		 inabilitado(NIF);
 		 administrador(NIF,_);
 		 contrato(_,NIF,_,_,_,_,_,_,_,_);
-		 contrato(_,_,NIF,_,_,_,_,_,_,_)), R),
+		 contrato(_,_,NIF,_,_,_,_,_,_,_);
+		 fiscal(NIF)), R),
 	comprimento(R,0)).
 
 % 2) Empresa.
 
 % ---- 1) So pode existir um NIF unico, partilhado entre
 % pessoas e empresas.
-+empresa(NIF,_,_)::(existeEntidade(NIF)).
++empresa(NIF,_,_)::(
+	solucoes(NIF,
+		((pessoa(NIF,_,_) ,
+		 empresa(NIF,_,_))),R),
+	comprimento(R,0)).
+
++empresa(NIF,_,_)::(
+	solucoes(NIF,
+		(empresa(NIF,_,_)),R),
+	comprimento(R,1)).
 
 % ---- 2) Nao se pode remover uma empresa se esta tiver
 % envolvida em crimes, contratos, administracoes ou rela-
@@ -59,6 +105,8 @@ existeEntidade(NIF) :-
 	solucoes(NIF,
 		(crime(NIF,_,_);
 		 administrador(_,NIF);
+		 subempresa(NIF,_);
+		 subempresa(_,NIF);
 		 contrato(_,NIF,_,_,_,_,_,_,_,_);
 		 contrato(_,_,NIF,_,_,_,_,_,_,_)), R),
 	comprimento(R,0)).
@@ -66,7 +114,13 @@ existeEntidade(NIF) :-
 % 3) Crime.
 
 % ---- 1) A entidade acusada de crime deve existir.
-+crime(NIF,_,_)::(existeEntidade(NIF)).
++crime(NIF,_,_)::(
+	solucoes(NIF,
+		(crime(NIF,_,_),
+		 (pessoa(NIF,_,_) ;
+		  empresa(NIF,_,_))), R),
+	comprimento(R,N),
+	N >= 1).
 
 % ---- 2) A data de inicio de pena deve ser anterior a data
 % de fim da pena.
@@ -81,8 +135,11 @@ existeEntidade(NIF) :-
 % ---- 1) A interdicao deve ser emitida para uma pessoa que
 % exista.
 +interdito(NIF,_,_)::(
-	getPessoa(NIF,R),
-	comprimento(R,1)).
+	solucoes(NIF,
+		(interdito(NIF,_,_) ,
+		 pessoa(NIF,_,_)), R),
+	comprimento(R,N),
+	N >= 1).
 
 % ---- 2) A data de inicio de interdicao deve ser anterior
 % a data de fim desta.
@@ -98,35 +155,35 @@ existeEntidade(NIF) :-
 % cado, só pode existir uma inabilitacao por pessoa na base
 % de conhecimento.
 +inabilitado(NIF)::(
-	getPessoa(NIF,R1),
-	getInabilitado(NIF,R2),
-	comprimento(R1,1),
-	comprimento(R2,1)).
+	solucoes(NIF,
+		(inabilitado(NIF),
+		 pessoa(NIF,_,_)),R),
+	comprimento(R,1)).
 
 % 6) Administrador.
 
 % ---- 1) A pessoa e empresa devem existir.
 +administrador(NIF1,NIF2)::(
-	getPessoa(NIF1,R1),
-	getEmpresa(NIF2,R2),
-	comprimento(R1,1),
-	comprimento(R2,1)).
+	solucoes((NIF1,NIF2),
+		(administrador(NIF1,NIF2),
+		 pessoa(NIF1,_,_),
+		 empresa(NIF2,_,_)),R),
+	comprimento(R,1)).
 
 % ---- 2) Nao se deve verificar relacoes de administracao 
 % repetidas.
-+administrador(NIF1,NIF2)::(
-	getAdministradorOverall(NIF1,NIF2,R),
-	comprimento(R,1)).
+
+% FEITO EM 6.1)
 
 % 7) Fiscal.
 
 % ---- 1) A pessoa deve existir e nao existir fiscais repe-
 % tidos.
 +fiscal(NIF)::(
-	getPessoa(NIF,R1),
-	getFiscal(NIF,R2),
-	comprimento(R1,1),
-	comprimento(R2,1)).
+	solucoes(NIF,
+		(fiscal(NIF),
+		 pessoa(NIF,_,_)),R),
+	comprimento(R,1)).
 
 % 7.1) Fiscaliza.
 
@@ -137,24 +194,25 @@ existeEntidade(NIF) :-
 
 % ---- 2) O contrato envolvido deve existir, e a data ser
 % seguida a data de est. do contrato.
-+fiscaliza(_,_,_)::(
-	solucoes(ID,
-		(fiscaliza(_,ID,Dt),
++fiscaliza(_,IDc,_)::(
+	solucoes(IDc,
+		(fiscaliza(_,IDc,Dt),
 		contrato(IDc,_,_,_,_,_,_,_,_,Dc),
-		Dc @> Dt), R),
-	comprimento(R,0)).
+		Dc @=< Dt), R),	%>
+	comprimento(R,1)).
 
 
 % 8) Sub-empresa.
 
 % ---- 1) Empresa filha e mae devem existir e nao podem
 % ser a mesma.
-+subempresa(_,_)::(
++subempresa(NIF1,NIF2)::(
 	solucoes((NIF1,NIF2),
-		( NIF1 =:= NIF2 ,
-		  subempresa(NIF1,NIF2) )
-		, R),
-	comprimento(R,0)).
+		( NIF1 =\= NIF2 ,
+		  subempresa(NIF1,NIF2),
+		  empresa(NIF1,_,_),
+		  empresa(NIF2,_,_) ), R),
+	comprimento(R,1)).
 
 % 9) Contrato.
 
@@ -164,13 +222,14 @@ existeEntidade(NIF) :-
 	comprimento(R, 1)).
 
 % ---- 2) Adjudicantes e adjudicatarios devem existir.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
-	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,_) ,
-		  (nao(existeEntidade(NIF1)) ;
-		   nao(existeEntidade(NIF2)) ) )
++contrato(_,NIF1,NIF2,_,_,_,_,_,_,_)::(
+	solucoes((NIF1,NIF2),
+		( contrato(_,NIF1,NIF2,_,_,_,_,_,_,_) ,
+		  (pessoa(NIF1,_,_) ; empresa(NIF1,_,_)) ,
+		  (pessoa(NIF2,_,_) ; empresa(NIF2,_,_)))
 		,R),
-	comprimento(R,0)).
+	comprimento(R,N),
+	N >= 1).
 
 % ---- 3) Tipo de contrato e tipo de procedimento deve
 %  ser valido.
@@ -188,6 +247,14 @@ existeEntidade(NIF) :-
 		   		 'concurso publico'])) ) ), R),
 	comprimento(R,0)).
 
+% ---- 4) Nao pode ser removido um contrato se este
+% tiver em fiscalizacoes.
+-contrato(IDc,_,_,_,_,_,_,_,_,_)::(
+	solucoes(IDc,
+		(fiscaliza(_,IDc,_)), R),
+	comprimento(R, 0)).
+
+/*
 % #########################################################
 
 % #########################################################
@@ -303,19 +370,19 @@ existeEntidade(NIF) :-
 % 8) Sub-empresa.
 
 % ---- 1) Empresa filha nao pode ser mae da empresa mae.
-+subempresa(_,_)::(
-	solucoes((NIF1,NIF2),
-		(subempresa(NIF1,NIF2),
-		 mae(NIF1,NIF2)), R),
-	comprimento(R,0)).
+%+subempresa(_,_)::(
+%	solucoes((NIF1,NIF2),
+%		(subempresa(NIF1,NIF2),
+%		 mae(NIF1,NIF2)), R),
+%	comprimento(R,0)).
 
 % ---- 2) Cada empresa so pode ter uma empresa mae.
-+subempresa(_,_)::(
-	solucoes(NIF, 
-		(subempresa(NIF,NIF1),
-		 subempresa(NIF,NIF2),
-		 NIF1 =\= NIF2),R),
-	comprimento(R,0)).
+%+subempresa(_,_)::(
+%	solucoes(NIF, 
+%		(subempresa(NIF,NIF1),
+%		 subempresa(NIF,NIF2),
+%		 NIF1 =\= NIF2),R),
+%	comprimento(R,0)).
 
 % 9) Contrato.
 
@@ -402,3 +469,4 @@ existeEntidade(NIF) :-
 % ratos ja celebrados for >= 75.000 euros.
 
 % #########################################################
+*/
