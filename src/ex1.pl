@@ -31,4 +31,11 @@
 % Inclui operacoes de interesse para com as entidades.
 :- include('operacoes.pl').
 
+% Inclui todos os invariantes necessarios ao sistema.
+:- include('invariantes.pl').
+
+% Inclui todo o povoamento desenvolvido,
+% deve ser o ultimo include.
+:- include('povoamento.pl').
+
 % #########################################################

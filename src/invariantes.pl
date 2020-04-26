@@ -152,7 +152,7 @@ existeEntidade(NIF) :-
 +subempresa(_,_)::(
 	solucoes((NIF1,NIF2),
 		( NIF1 =:= NIF2 ,
-		  subempresa(NIF1,NIF2) ),
+		  subempresa(NIF1,NIF2) )
 		, R),
 	comprimento(R,0)).
 
@@ -168,7 +168,7 @@ existeEntidade(NIF) :-
 	solucoes(ID,
 		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,_) ,
 		  (nao(existeEntidade(NIF1)) ;
-		   nao(existeEntidade(NIF2)) ) ),
+		   nao(existeEntidade(NIF2)) ) )
 		,R),
 	comprimento(R,0)).
 
@@ -215,7 +215,7 @@ existeEntidade(NIF) :-
 	solucoes(ID,
 		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumprePena(NIF1, Dt) ;
-		   cumprePena(NIF2, Dt) ), R),
+		   cumprePena(NIF2, Dt) )), R),
 	comprimento(R,0)).
 
 % 4) Interdito.
@@ -226,7 +226,7 @@ existeEntidade(NIF) :-
 	solucoes(ID,
 		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumpreInterdicao(NIF1, Dt) ;
-		   cumpreInterdicao(NIF2, Dt) ), R),
+		   cumpreInterdicao(NIF2, Dt) )), R),
 	comprimento(R,0)).
 
 % ---- 2) Nao podem ser emitidas interdicoes com interva-
@@ -234,7 +234,7 @@ existeEntidade(NIF) :-
 +interdicao(NIF,_,_)::(
 	solucoes(NIF, 
 	 ( interdicao(NIF,Di,Df),
-	   interdicao(NIF,Di2, Df2),
+	   interdicao(NIF,Di2, Df2)
 	   ,Di =\= Di2, Df =\= Df2,
 	   ((Di2 @>= Di, Di2 @=< Df) ;
 	    (Df2 @>= Di, Df2 @=< Df)) ), R),
@@ -323,7 +323,7 @@ existeEntidade(NIF) :-
 % prio.
 +contrato(_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
+		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ),
 		  NIF1 =:= NIF2, R),
 	comprimento(R,0)).
 
@@ -335,7 +335,7 @@ existeEntidade(NIF) :-
 		  (cumpreInterdicao(NIF1,Dt) ; 
 		   cumpreInterdicao(NIF2,Dt) ;
 		   inabilitado(NIF1) ;
-		   inabilitado(NIF2)), R),
+		   inabilitado(NIF2))), R),
 	comprimento(R,0)).
 
 % ---- 3) Nenhum membro da familia de empresas envolvidas
@@ -343,7 +343,7 @@ existeEntidade(NIF) :-
 +contrato(_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
-		  ((familia(Z,NIF1), cumprePena(Z,Dt) ;
+		  ((familia(Z,NIF1), cumprePena(Z,Dt)) ;
 		   (familia(Z,NIF2), cumprePena(Z,Dt)) )), R),
 	comprimento(R,0)).
 
@@ -380,7 +380,7 @@ existeEntidade(NIF) :-
 		  Tp =:= 'ajuste direto',
 		  ((Val < 0 ; Val > 100000) ;
 		   (Tc =\= 'empretadas de obras publicas') ;
-		   (pessoa(NIF1,_,_) ; pessoa(NIF2,_,_))
+		   (pessoa(NIF1,_,_) ; pessoa(NIF2,_,_)) ;
 		   (Pr < 0 ; Pr > 730))  ), R),
 	comprimento(R,0)).
 
