@@ -42,19 +42,27 @@ empresa(104,'Rochas, lda','Rua Calma, nº 5').
 
 % 3) Crime.
 
-
+crime(1,'2010-02-17','2020-02-17').
 
 % 4) Interdito.
 
 
 % 5) Inabilitado.
 
+inabilitado(009).
 
 % 6) Administrador.
 
+administrador(008,100).
+administrador(007,101).
+administrador(006,102).
+administrador(005,103).
+administrador(004,104).
 
 % 7) Fiscal.
 
+fiscal(001).
+fiscal(002).
 
 % 7.1) Fiscaliza.
 
@@ -89,13 +97,11 @@ excecao(empresa(n,'Hermanos, lda','Rua de Baixo, nº 3')) :- n >= 111, n =< 115.
 % # Devido à falta de organização ninguém sabe ao certo a morada destas empresas
 excecao(empresa(116,'Software, lda',morada)).
 excecao(empresa(117,'Hardware, lda',morada)).
-excecao(empresa(118,'Martelos, lda',morada)).
 
 % 3) Crime.
 
 % # Devido a um erro de cálculo ninguém sabe ao certo quando terminam estes crimes
 excecao(crime(1,'2020-02-17',Df)).
-excecao(crime(1,'2010-02-17',Df)).
 excecao(crime(2,'2020-01-10',Df)).
 excecao(crime(3,'1994-04-24',Df)).
 
