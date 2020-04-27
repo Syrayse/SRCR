@@ -20,23 +20,23 @@
 % 1) Pessoa.
 
 % # Sabemos o NIF destas pessoas, no entanto a sua morada é desconhecida.
-pessoa(123456789,'Alberto Dias',morada).
-pessoa(987654321,'Rodolfo Dias',morada).
+pessoa(001,'Alberto Dias',morada).
+pessoa(002,'Rodolfo Dias',morada).
 
 % # Devido ao mau preenchimento de um formulário o NIF ficou como ultimo caracter apagado
-excecao(pessoa(n,'Manuel Silva','Rua do Lado, nº 23')) :- n >= 111222330, n =< 111222339.
+excecao(pessoa(n,'Manuel Silva','Rua do Lado, nº 23')) :- n >= 003, n =< 009.
 
 % 2) Empresa.
 
 % # Devido a um erro no sistema algumas empresas viram alguns numeros do NIF apagados
-excecao(empresa(n,'Empresa, lda','Rua de Cima, nº 3')) :- n >= 111000110, n =< 111000119.
-excecao(empresa(n,'Negocios, lda','Rua de Cima, nº 1')) :- n >= 111000110, n =< 111000114.
-excecao(empresa(n,'Hermanos, lda','Rua de Baixo, nº 3')) :- n >= 111000115, n =< 111000119.
+excecao(empresa(n,'Empresa, lda','Rua de Cima, nº 3')) :- n >= 010, n =< 019.
+excecao(empresa(n,'Negocios, lda','Rua de Cima, nº 1')) :- n >= 020, n =< 023.
+excecao(empresa(n,'Hermanos, lda','Rua de Baixo, nº 3')) :- n >= 024, n =< 029.
 
 % # Devido à falta de organização ninguém sabe ao certo a morada destas empresas
-pessoa(666666000,'Software, lda',morada).
-pessoa(666666001,'Hardware, lda',morada).
-pessoa(666666002,'Martelos, lda',morada).
+pessoa(030,'Software, lda',morada).
+pessoa(031,'Hardware, lda',morada).
+pessoa(032,'Martelos, lda',morada).
 
 % 3) Crime.
 
