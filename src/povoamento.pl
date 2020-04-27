@@ -34,9 +34,9 @@ excecao(empresa(n,'Negocios, lda','Rua de Cima, nº 1')) :- n >= 020, n =< 023.
 excecao(empresa(n,'Hermanos, lda','Rua de Baixo, nº 3')) :- n >= 024, n =< 029.
 
 % # Devido à falta de organização ninguém sabe ao certo a morada destas empresas
-pessoa(030,'Software, lda',morada).
-pessoa(031,'Hardware, lda',morada).
-pessoa(032,'Martelos, lda',morada).
+empresa(030,'Software, lda',morada).
+empresa(031,'Hardware, lda',morada).
+empresa(032,'Martelos, lda',morada).
 
 % 3) Crime.
 
