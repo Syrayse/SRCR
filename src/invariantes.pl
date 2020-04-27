@@ -219,7 +219,7 @@
 		(fiscaliza(_,IDc,_)), R),
 	comprimento(R, 0)).
 
-/*
+
 % #########################################################
 
 % #########################################################
@@ -261,16 +261,22 @@
 		   cumpreInterdicao(NIF2, Dt) )), R),
 	comprimento(R,0)).
 
+
 % ---- 2) Nao podem ser emitidas interdicoes com interva-
 % los sobreposto para a mesma pessoa.
-+interdicao(NIF,_,_)::(
++interdito(_,_,_)::(
 	solucoes(NIF, 
-	 ( interdicao(NIF,Di,Df),
-	   interdicao(NIF,Di2, Df2)
-	   ,Di =\= Di2, Df =\= Df2,
-	   ((Di2 @>= Di, Di2 @=< Df) ;
-	    (Df2 @>= Di, Df2 @=< Df)) ), R),
+	 ( interdito(NIF,Di,Df),
+	   interdito(NIF,Di2, Df2)
+	   ,(Di \== Di2 ; Df \== Df2),
+	   ((Di2 @>= Di, Di2 @=< Df) ;     % >
+	    (Df2 @>= Di, Df2 @=< Df)) ), R),   % >
 	comprimento(R,0)).
+
++interdito(NIF,Di,Df)::(
+	solucoes((NIF,Di,Df),
+		(interdito(NIF,Di,Df)), R),
+	comprimento(R,1)).
 
 % 5) Inabilitado.
 
@@ -283,12 +289,13 @@
 +administrador(NIF,_)::(
 	getAdministrador(NIF,R),
 	comprimento(R,N),
-	N =< 2).
+	N =< 2).       % >
 
 % ---- 2) Administrador nao pode ser inabilitado.
 +administrador(NIF,_)::(
 	getInabilitado(NIF,R),
 	comprimento(R,0)).
+
 
 % ---- 3) Nao pode ser removido administrador caso este
 % seja o unico administrador da empresa. 
@@ -326,28 +333,27 @@
 % da empresas envolvidas ou respectivas familias.
 +fiscaliza(_,_,_)::(
 	solucoes(NIF,
-		( fiscaliza(NIF,NIFe,_) ,
+		(fiscaliza(NIF,ID,_) ,
+		 (contrato(ID,NIFe,_,_,_,_,_,_,_,_);
+		  contrato(ID,_,NIFe,_,_,_,_,_,_,_)),
 		  ( administrador(NIF,NIFe) ;
-		    (mae(NIFm,NIFe), administrador(NIF,NIFm));
-		    (filha(NIFf,NIFe), administrador(NIF,NIFf))) ),R),
+		    (familia(NIFf,NIFe) , administrador(NIF,NIFf))) ),R),
 	comprimento(R,0)).
 
 % 8) Sub-empresa.
 
 % ---- 1) Empresa filha nao pode ser mae da empresa mae.
-%+subempresa(_,_)::(
-%	solucoes((NIF1,NIF2),
-%		(subempresa(NIF1,NIF2),
-%		 mae(NIF1,NIF2)), R),
-%	comprimento(R,0)).
++subempresa(_,_)::(
+	solucoes((NIF1,NIF2),
+		(subempresa(NIF1,NIF2),
+		 mae(NIF1,NIF2)), R),
+	comprimento(R,0)).
 
 % ---- 2) Cada empresa so pode ter uma empresa mae.
-%+subempresa(_,_)::(
-%	solucoes(NIF, 
-%		(subempresa(NIF,NIF1),
-%		 subempresa(NIF,NIF2),
-%		 NIF1 =\= NIF2),R),
-%	comprimento(R,0)).
++subempresa(NIF,_)::(
+	solucoes(NIF, 
+		(subempresa(NIF,_)),R),
+	comprimento(R,1)).
 
 % 9) Contrato.
 
@@ -355,8 +361,7 @@
 % prio.
 +contrato(_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ),
-		  NIF1 =:= NIF2, R),
+		( contrato(ID,NIF,NIF,_,_,_,_,_,_,Dt) ), R),
 	comprimento(R,0)).
 
 % ---- 2) Atores nao podem estar a cumprir pena, interditos
@@ -394,10 +399,9 @@
 % de vigencia maximo de 1 ano.
 +contrato(_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,_,_,Tc,Tp,_,Val,Pr,_,Dt) ,
-		  Tp =:= 'ajuste direto',
+		( contrato(ID,_,_,Tc,'ajuste direto',_,Val,Pr,_,Dt),
 		  ((Val < 0 ; Val > 5000) ;
-		   (Tc =:= 'empretadas de obras publicas') ;
+		   (Tc == 'empreitadas de obras publicas') ;
 		   (Pr < 0 ; Pr > 365))  ), R),
 	comprimento(R,0)).
 
@@ -408,10 +412,9 @@
 % volvidas empresas, * prazo maximo de 2 anos.
 +contrato(_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,Tc,Tp,_,Val,Pr,_,Dt) ,
-		  Tp =:= 'ajuste direto',
+		( contrato(ID,NIF1,NIF2,Tc,'consulta previa',_,Val,Pr,_,Dt) ,
 		  ((Val < 0 ; Val > 100000) ;
-		   (Tc =\= 'empretadas de obras publicas') ;
+		   (Tc \== 'empreitadas de obras publicas') ;
 		   (pessoa(NIF1,_,_) ; pessoa(NIF2,_,_)) ;
 		   (Pr < 0 ; Pr > 730))  ), R),
 	comprimento(R,0)).
@@ -421,8 +424,7 @@
 % anos.
 +contrato(_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,_,_,Tc,Tp,_,Val,Pr,_,Dt) ,
-		  Tp =:= 'ajuste direto',
+		( contrato(ID,_,_,Tc,'concurso publico',_,Val,Pr,_,Dt) ,
 		  ((Val < 0 ; Val > 200000) ;
 		   (Pr < 0 ; Pr > 1825))  ), R),
 	comprimento(R,0)).
@@ -434,4 +436,3 @@
 % ratos ja celebrados for >= 75.000 euros.
 
 % #########################################################
-*/
