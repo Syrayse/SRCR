@@ -181,11 +181,11 @@ getEmpresasFamilia(NIF,R) :-
 			 ( mae(Z,NIF) ; filha(Z,NIF) ), R).
 
 % ---- 4.1) Verifica se empresa e mae.
-mae(X,Y) :- subempresa(X,Z), maeAux(X,Y,Z).
+mae(X,Y) :- subempresa(Z,X), maeAux(X,Y,Z).
 
 maeAux(X,Y,Y).
 maeAux(X,Y,Z) :- 
-	subempresa(Z,W), maeAux(X,Y,W). 
+	subempresa(W,Z), maeAux(X,Y,W). 
 
 % ---- 4.2) Verifica se empresa e filha.
 filha(X,Y) :- subempresa(Z,Y), filhaAux(X,Y,Z).
