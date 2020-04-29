@@ -49,6 +49,10 @@
 %  TipoDeContrato, TipoDeProc, Descricao, Valor,
 %  Prazo, Local, Data ).
 :- dynamic(contrato/11).
+
+% 10) data possui:
+% (YYYY,MM,DD). Porem, nao e preciso definir.
+
 % #########################################################
 
 % #########################################################

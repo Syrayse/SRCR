@@ -17,6 +17,27 @@
 % #########################################################
 % Operacoes de acesso.
 
+% 0) Data.
+% Operacoes para trabalhar com datas.
+
+% ---- 1) Verifica se uma data occore num dado ano.
+dataEm(data(YYYY,_,_),YYYY).
+
+% ---- 2) Verifica se uma data esta contida entre o inter-
+% valo de anos indicado.
+dataEm(data(YYYY,_,_),Y1,Y2) :-
+	YYYY >= Y1, YYYY =< Y2.      			% >
+
+% ---- 3) Indica se uma data e anterior a outra data.
+menorData(data(Y1,_,_), data(Y2,_,_)) :-
+	Y1 =< Y2.                                 % >
+
+menorData(data(Y,M1,_), data(Y,M2,_)) :-
+	M1 =< M2.                                % >
+
+menorData(data(Y,M,D1), data(Y,M,D2)) :-
+	D1 =< D2.                               % >
+
 % 1) Pessoa.
 
 % ---- 1) Recebe NIF, retorna todas as pessoas associadas
