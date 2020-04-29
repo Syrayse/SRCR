@@ -92,7 +92,7 @@
 +crime(_,_,_)::(
 	solucoes(NIF,
 		( crime(NIF,Di,Df),
-		  Di @> Df ), R),
+		  nao(menorData(Di,Df)) ), R),
 	comprimento(R,0)).
 
 % 4) Interdito.
@@ -111,7 +111,7 @@
 +interdito(_,_,_)::(
 	solucoes(NIF,
 		( interdito(NIF,Di,Df),
-		  Di @> Df ), R),
+		  nao(menorData(Di,Df)) ), R),
 	comprimento(R,0)).
 
 % 5) Inabilitado.
@@ -163,7 +163,7 @@
 	solucoes(IDc,
 		(fiscaliza(_,IDc,Dt),
 		contrato(IDc,_,_,_,_,_,_,_,_,_,Dc),
-		Dc @=< Dt), R),	%>
+		menorData(Dc,Dt) ), R),
 	comprimento(R,1)).
 
 
@@ -275,8 +275,8 @@ nulo(confidencial).
 	 ( interdito(NIF,Di,Df),
 	   interdito(NIF,Di2, Df2)
 	   ,(Di \== Di2 ; Df \== Df2),
-	   ((Di2 @>= Di, Di2 @=< Df) ;     % >
-	    (Df2 @>= Di, Df2 @=< Df)) ), R),   % >
+	   (contidoEm(Di2,Di,Df) ; 
+	    contidoEm(Df2,Di,Df) ) ), R), 
 	comprimento(R,0)).
 
 +interdito(NIF,Di,Df)::(

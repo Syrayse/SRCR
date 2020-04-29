@@ -38,6 +38,11 @@ menorData(data(Y,M1,_), data(Y,M2,_)) :-
 menorData(data(Y,M,D1), data(Y,M,D2)) :-
 	D1 =< D2.                               % >
 
+% ---- 4) Verifica se uma data esta contida num intervalo
+% de datas.
+contidoEm(Dt, Dti, Dtf) :-
+	menorData(Dti, Dt), menorData(Dt,Dtf).
+
 % 1) Pessoa.
 
 % ---- 1) Recebe NIF, retorna todas as pessoas associadas
@@ -77,12 +82,12 @@ getEmpresaCrime(NIF,Data,R) :-
 % ---- 1) Recebe NIF e data, indica se o NIF indicado esta
 % a cumprir pena.
 cumprePena(NIF,Data) :-
-	crime(NIF, Di, Df), Data @>= Di, Data @=< Df.
+	crime(NIF, Di, Df), contidoEm(Data, Di, Df).
 
 % ---- 2) Recebe NIF e Data, indica se o NIF indicado esta
 % a cumprir interdicao.
 cumpreInterdicao(NIF, Data) :-
-	interdito(NIF, Di, Df), Data @>= Di, Data @=< Df.
+	interdito(NIF, Di, Df), contidoEm(Data, Di, Df).
 
 % ---- 2) Recebe NIF, retorna todas os crimes associados
 % a esse NIF.
@@ -95,8 +100,7 @@ getCrime(NIF,R) :-
 getCrimeData(NIF,Data,R) :-
 	solucoes( crime(NIF,Di,Df),
 			( crime(NIF,Di,Df) , 
-			  Data @>= Di,
-			  Data @=< Df ), R).
+			  contidoEm(Data,Di,Df) ), R).
 
 % 4) Interdito.
 
@@ -175,7 +179,7 @@ getFiscalizacoesOverall(NIF,IDc,R) :-
 getFiscalizacoesData(IDc,Data,R) :-
 	solucoes(fiscalizacao(_,IDc,Dt),
 			(fiscalizacao(_,IDc,Dt),
-			 Dt @< Data), R).
+			 menorData(Dt, Data)), R).
 
 % 8) Sub-empresa.
 
