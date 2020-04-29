@@ -215,8 +215,8 @@ getContrato(IDc,R) :-
 % ---- 1.1) Recebe ID e versao do contrato, retorna todas os contratos
 % com esse id.
 getContrato(IDc,V,R) :-
-	solucoes(contrato(IDc,V,_,_,_,_,_,_,_,_),
-			(contrato(IDc,V,_,_,_,_,_,_,_,_)),R).
+	solucoes(contrato(IDc,V,_,_,_,_,_,_,_,_,_),
+			(contrato(IDc,V,_,_,_,_,_,_,_,_,_)),R).
 
 % ---- 2) Recebe um tipo e retorna todos os contratos com
 % esse tipo.

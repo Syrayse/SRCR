@@ -43,8 +43,8 @@
 		 interdito(NIF,_,_);
 		 inabilitado(NIF);
 		 administrador(NIF,_);
-		 contrato(_,_,_,NIF,_,_,_,_,_,_,_,_);
-		 contrato(_,_,_,_,NIF,_,_,_,_,_,_,_);
+		 contrato(_,_,NIF,_,_,_,_,_,_,_,_);
+		 contrato(_,_,_,NIF,_,_,_,_,_,_,_);
 		 fiscal(NIF)), R),
 	comprimento(R,0)).
 
@@ -162,7 +162,7 @@
 +fiscaliza(_,IDc,_)::(
 	solucoes(IDc,
 		(fiscaliza(_,IDc,Dt),
-		contrato(IDc,_,_,_,_,_,_,_,_,Dc),
+		contrato(IDc,_,_,_,_,_,_,_,_,_,Dc),
 		Dc @=< Dt), R),	%>
 	comprimento(R,1)).
 
@@ -182,12 +182,12 @@
 % 9) Contrato.
 
 % ---- 1) ID de contrato nao pode ser repetido.
-+contrato(IDc,_,_,_,_,_,_,_,_,_)::(
++contrato(IDc,_,_,_,_,_,_,_,_,_,_)::(
 	getContrato(IDc, R),
 	comprimento(R, 1)).
 
 % ---- 2) Adjudicantes e adjudicatarios devem existir.
-+contrato(_,_,_,_,_,_,NIF1,NIF2,_,_,_,_,_,_,_)::(
++contrato(_,_,NIF1,NIF2,_,_,_,_,_,_,_)::(
 	solucoes((NIF1,NIF2),
 		( contrato(_,_,NIF1,NIF2,_,_,_,_,_,_,_) ,
 		  (pessoa(NIF1,_,_) ; empresa(NIF1,_,_)) ,
@@ -198,7 +198,7 @@
 
 % ---- 3) Tipo de contrato e tipo de procedimento deve
 %  ser valido.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,_,_,TC,TP,_,_,_,_,_) ,
 		  (nao(membro(TC, 
@@ -249,7 +249,7 @@ nulo(confidencial).
 
 % ---- 1) Entidades a cumprir pena nao podem estar envol-
 % vidas em contratos.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumprePena(NIF1, Dt) ;
@@ -260,7 +260,7 @@ nulo(confidencial).
 
 % ---- 1) Pessoas a cumprir interdicao nao podem estar
 % envolvidas em contratos.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumpreInterdicao(NIF1, Dt) ;
@@ -340,8 +340,8 @@ nulo(confidencial).
 +fiscaliza(_,_,_)::(
 	solucoes(NIF,
 		(fiscaliza(NIF,ID,_) ,
-		 (contrato(ID,NIFe,_,_,_,_,_,_,_,_);
-		  contrato(ID,_,NIFe,_,_,_,_,_,_,_)),
+		 (contrato(ID,_,NIFe,_,_,_,_,_,_,_,_);
+		  contrato(ID,_,_,NIFe,_,_,_,_,_,_,_)),
 		  ( administrador(NIF,NIFe) ;
 		    (familia(NIFf,NIFe) , administrador(NIF,NIFf))) ),R),
 	comprimento(R,0)).
@@ -365,14 +365,14 @@ nulo(confidencial).
 
 % ---- 1) Nenhum ator pode fechar um contrato consigo pro-
 % prio.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF,NIF,_,_,_,_,_,_,Dt) ), R),
 	comprimento(R,0)).
 
 % ---- 2) Atores nao podem estar a cumprir pena, interditos
 % ou inabilitados a data do fecho do contrato.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumpreInterdicao(NIF1,Dt) ; 
@@ -383,7 +383,7 @@ nulo(confidencial).
 
 % ---- 3) Nenhum membro da familia de empresas envolvidas
 % pode estar a cumprir pena.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  ((familia(Z,NIF1), cumprePena(Z,Dt)) ;
@@ -392,7 +392,7 @@ nulo(confidencial).
 
 % ---- 4) Empresas envolvidas com administracoes com regis-
 % to criminal nao podem estar envolvidos em contratos.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  ((administrador(Z,NIF1), crime(Z,_,_)) ;
@@ -403,7 +403,7 @@ nulo(confidencial).
 % * possuir valor <= 5.000 euros, * valido para todos os 
 % contrato exceto empreitadas de obras publicas, * prazo
 % de vigencia maximo de 1 ano.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,_,_,Tc,'ajuste direto',_,Val,Pr,_,Dt),
 		  ((Val < 0 ; Val > 5000) ;
@@ -416,7 +416,7 @@ nulo(confidencial).
 % * possuir valor <= 100.000 euros, * so valido para contra-
 % tos de empreitadas de obras publicas, * so podem estar en-
 % volvidas empresas, * prazo maximo de 2 anos.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,NIF1,NIF2,Tc,'consulta previa',_,Val,Pr,_,Dt) ,
 		  ((Val < 0 ; Val > 100000) ;
@@ -428,7 +428,7 @@ nulo(confidencial).
 % ---- 7) Contratos "concurso publico" devem:
 % * possuir valor <= 200.000 euros, * prazo maximo de 5 
 % anos.
-+contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
 		( contrato(ID,_,_,_,Tc,'concurso publico',_,Val,Pr,_,Dt) ,
 		  ((Val < 0 ; Val > 200000) ;
