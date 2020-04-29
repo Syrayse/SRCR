@@ -240,6 +240,18 @@ nulo(confidencial).
 
 % ---- 1) Pessoas apenas podem estar envolvidas num maximo
 % de 3 contratos anualmente.
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
+	solucoes(ID,
+		( (contrato(ID,_,NIF,_,_,_,_,_,_,_,data(Y,_,_)) ;
+		   contrato(ID,_,_,NIF,_,_,_,_,_,_,data(Y,_,_)) ) ,
+		 pessoa(NIF),
+		 solucoes(IDN,
+		 	( (contrato(IDN,_,NIF,_,_,_,_,_,_,_,Dt2) ;
+		 	   contrato(IDN,_,_,NIF,_,_,_,_,_,_,Dt2)),
+		 	   dataEm(Dt2,Y) ), R1),
+		 comprimento(R1,N1),
+		 N1 > 3) , R2),
+	comprimento(R2,0)).
 
 % 2) Empresa.
 
@@ -326,6 +338,15 @@ nulo(confidencial).
 
 % ---- 1) Fiscal pode estar envolvido na fiscalizacao
 % de no maximo 2 contratos anualmente.
++fiscaliza(_,_,_)::(
+	solucoes((NIF,ID),
+		(fiscaliza(NIF,ID,data(Y,_,_)) ,
+		 solucoes(IDN,
+		 	( fiscaliza(NIF,IDN,Dt2),
+		 	  dataEm(Dt2,Y) ), R1),
+		 comprimento(R1,N1),
+		 N1 > 2) , R2),
+	comprimento(R2,0)).
 
 % ---- 2) So pode haver um fiscal responsavel por
 % cada contrato.
@@ -440,5 +461,20 @@ nulo(confidencial).
 % com as mesmas prestacoes no ano economico em curso e nos
 % dois anos economicos anterior, sempre que a soma dos cont-
 % ratos ja celebrados for >= 75.000 euros.
+sumAux([],0).
+sumAux([(_,V)|T], R) :-
+	sumAux(T,R1), R1 + V is R.
+
++contrato(_,_,_,_,_,_,_,_,_,_,_)::(
+	solucoes(NIF,
+		(contrato(_,_,NIF,_,_,_,_,Vi,_,_,data(Y,_,_)),
+		 Y - 2 is Yo,
+		 solucoes((NIFe,Val),
+		 	(contrato(_,_,NIF,NIFe,_,_,_,Val,_,_,Dt2) ,
+		 	 dataEm(Dt2,Yo,Y) ), R1),
+		 sumAux(R1,Vt),
+		 Vt - Vi is VF,
+		 VF >= 75000) , R2),
+	comprimento(R2,0)).
 
 % #########################################################
