@@ -125,6 +125,6 @@ excecao(crime(3,'1994-04-24',Df)).
 
 
 % 9) Contrato.
-
-
+contrato(1,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto','2020-04-28').
+excecao(contrato(IDC,V,_,IDA,_,_,_,_,_,_,_)):-contrato(IDC,V,_,confidencial,_,_,_,_,_,_,_).
 % #########################################################

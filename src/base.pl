@@ -45,10 +45,10 @@
 :- dynamic(subempresa/2).
 
 % 9) Contrato possui:
-% (ID Contrato, ID Adjudicante, ID Adjudicatario,
+% (ID Contrato, Versao,ID Adjudicante, ID Adjudicatario,
 %  TipoDeContrato, TipoDeProc, Descricao, Valor,
 %  Prazo, Local, Data ).
-:- dynamic(contrato/10).
+:- dynamic(contrato/11).
 % #########################################################
 
 % #########################################################
@@ -100,8 +100,8 @@
 	nao(excecao(subempresa( Nm,Nf ))).
 
 % 9) Contrato.
--contrato( I1,I2,I3,T1,T2,D,V,P,L,Dt ) :-
-	nao(contrato( I1,I2,I3,T1,T2,D,V,P,L,Dt )),
-	nao(excecao(contrato( I1,I2,I3,T1,T2,D,V,P,L,Dt ))).
+-contrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt ) :-
+	nao(contrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt )),
+	nao(excecao(contrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt ))).
 
 % #########################################################

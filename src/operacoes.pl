@@ -209,26 +209,32 @@ getEmpresasFamilia(NIF,Data,R) :-
 % ---- 1) Recebe ID do contrato, retorna todas os contratos
 % com esse id.
 getContrato(IDc,R) :-
-	solucoes(contrato(IDc,_,_,_,_,_,_,_,_,_),
-			(contrato(IDc,_,_,_,_,_,_,_,_,_)),R).
+	solucoes(contrato(IDc,_,_,_,_,_,_,_,_,_,_),
+			(contrato(IDc,_,_,_,_,_,_,_,_,_,_)),R).
+
+% ---- 1.1) Recebe ID e versao do contrato, retorna todas os contratos
+% com esse id.
+getContrato(IDc,V,R) :-
+	solucoes(contrato(IDc,V,_,_,_,_,_,_,_,_),
+			(contrato(IDc,V,_,_,_,_,_,_,_,_)),R).
 
 % ---- 2) Recebe um tipo e retorna todos os contratos com
 % esse tipo.
 getContratoPorTipo(Tipo,R) :-
-	solucoes(contrato(_,_,_,Tipo,_,_,_,_,_,_),
-			(contrato(_,_,_,Tipo,_,_,_,_,_,_)),R).
+	solucoes(contrato(_,_,_,_,Tipo,_,_,_,_,_,_),
+			(contrato(_,_,_,_,Tipo,_,_,_,_,_,_)),R).
 
 % ---- 3) Recebe ID do contrato, retorna todos os contratos
 % com um tipo de procedimento indicado.
 getContratoPorProc(Proc,R) :-
-	solucoes(contrato(_,_,_,_,Proc,_,_,_,_,_),
-			(contrato(_,_,_,_,Proc,_,_,_,_,_)),R).
+	solucoes(contrato(_,_,_,_,_,Proc,_,_,_,_,_),
+			(contrato(_,_,_,_,_,Proc,_,_,_,_,_)),R).
 
 % ---- 4) Recebe ID do contrato, retorna todos os contratos
 % de um tipo e determinado procedimento.
 getContratoOverall(Tipo,Proc,R) :-
-	solucoes(contrato(_,_,_,Tipo,Proc,_,_,_,_,_),
-			(contrato(_,_,_,Tipo,Proc,_,_,_,_,_)),R).
+	solucoes(contrato(_,_,_,_,Tipo,Proc,_,_,_,_,_),
+			(contrato(_,_,_,_,Tipo,Proc,_,_,_,_,_)),R).
 
 % #########################################################
 
@@ -305,10 +311,10 @@ remSubempresa( Nm,Nf ) :-
 	involucao(subempresa( Nm,Nf )).
 
 % 9) Contrato.
-addContrato( I1,I2,I3,T1,T2,D,V,P,L,Dt ) :-
-	evolucao(contrato( I1,I2,I3,T1,T2,D,V,P,L,Dt )).
+addContrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt ) :-
+	evolucao(contrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt )).
 
-remContrato( I1,I2,I3,T1,T2,D,V,P,L,Dt ) :-
-	involucao(contrato( I1,I2,I3,T1,T2,D,V,P,L,Dt )).
+remContrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt ) :-
+	involucao(contrato( I1,V1,I2,I3,T1,T2,D,V2,P,L,Dt )).
 
 % #########################################################

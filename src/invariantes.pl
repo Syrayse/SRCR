@@ -43,8 +43,8 @@
 		 interdito(NIF,_,_);
 		 inabilitado(NIF);
 		 administrador(NIF,_);
-		 contrato(_,NIF,_,_,_,_,_,_,_,_);
-		 contrato(_,_,NIF,_,_,_,_,_,_,_);
+		 contrato(_,_,_,NIF,_,_,_,_,_,_,_,_);
+		 contrato(_,_,_,_,NIF,_,_,_,_,_,_,_);
 		 fiscal(NIF)), R),
 	comprimento(R,0)).
 
@@ -72,8 +72,8 @@
 		 administrador(_,NIF);
 		 subempresa(NIF,_);
 		 subempresa(_,NIF);
-		 contrato(_,NIF,_,_,_,_,_,_,_,_);
-		 contrato(_,_,NIF,_,_,_,_,_,_,_)), R),
+		 contrato(_,_,NIF,_,_,_,_,_,_,_,_);
+		 contrato(_,_,_,NIF,_,_,_,_,_,_,_)), R),
 	comprimento(R,0)).
 
 % 3) Crime.
@@ -187,9 +187,9 @@
 	comprimento(R, 1)).
 
 % ---- 2) Adjudicantes e adjudicatarios devem existir.
-+contrato(_,NIF1,NIF2,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,NIF1,NIF2,_,_,_,_,_,_,_)::(
 	solucoes((NIF1,NIF2),
-		( contrato(_,NIF1,NIF2,_,_,_,_,_,_,_) ,
+		( contrato(_,_,NIF1,NIF2,_,_,_,_,_,_,_) ,
 		  (pessoa(NIF1,_,_) ; empresa(NIF1,_,_)) ,
 		  (pessoa(NIF2,_,_) ; empresa(NIF2,_,_)))
 		,R),
@@ -198,9 +198,9 @@
 
 % ---- 3) Tipo de contrato e tipo de procedimento deve
 %  ser valido.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,_,_,TC,TP,_,_,_,_,_) ,
+		( contrato(ID,_,_,_,TC,TP,_,_,_,_,_) ,
 		  (nao(membro(TC, 
 		  		['aquisicao de bens moveis',
 		  		 'locacao de bens moveis',
@@ -214,12 +214,18 @@
 
 % ---- 4) Nao pode ser removido um contrato se este
 % tiver em fiscalizacoes.
--contrato(IDc,_,_,_,_,_,_,_,_,_)::(
+-contrato(IDc,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(IDc,
 		(fiscaliza(_,IDc,_)), R),
 	comprimento(R, 0)).
 
-
+% ---- 5) Nao se pode adicionar informação confidencial sobre o adjuticario de um contrato de sigilo pré-existente
+nulo(confidencial).
++contrato(IDc,V1,_,IDa2,_,sigilo,_,_,_,_,_)::(
+	solucoes(IDc,
+		(contrato(IDc,V3,_,confidencial,_,sigilo,_,_,_,_,_),V3 \= V1
+		,nao(nulo(IDa2))), R),
+	comprimento(R, 0)).
 % #########################################################
 
 % #########################################################
@@ -243,9 +249,9 @@
 
 % ---- 1) Entidades a cumprir pena nao podem estar envol-
 % vidas em contratos.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
+		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumprePena(NIF1, Dt) ;
 		   cumprePena(NIF2, Dt) )), R),
 	comprimento(R,0)).
@@ -254,9 +260,9 @@
 
 % ---- 1) Pessoas a cumprir interdicao nao podem estar
 % envolvidas em contratos.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
+		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumpreInterdicao(NIF1, Dt) ;
 		   cumpreInterdicao(NIF2, Dt) )), R),
 	comprimento(R,0)).
@@ -359,16 +365,16 @@
 
 % ---- 1) Nenhum ator pode fechar um contrato consigo pro-
 % prio.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF,NIF,_,_,_,_,_,_,Dt) ), R),
+		( contrato(ID,_,NIF,NIF,_,_,_,_,_,_,Dt) ), R),
 	comprimento(R,0)).
 
 % ---- 2) Atores nao podem estar a cumprir pena, interditos
 % ou inabilitados a data do fecho do contrato.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
+		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  (cumpreInterdicao(NIF1,Dt) ; 
 		   cumpreInterdicao(NIF2,Dt) ;
 		   inabilitado(NIF1) ;
@@ -377,18 +383,18 @@
 
 % ---- 3) Nenhum membro da familia de empresas envolvidas
 % pode estar a cumprir pena.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
+		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  ((familia(Z,NIF1), cumprePena(Z,Dt)) ;
 		   (familia(Z,NIF2), cumprePena(Z,Dt)) )), R),
 	comprimento(R,0)).
 
 % ---- 4) Empresas envolvidas com administracoes com regis-
 % to criminal nao podem estar envolvidos em contratos.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
+		( contrato(ID,_,NIF1,NIF2,_,_,_,_,_,_,Dt) ,
 		  ((administrador(Z,NIF1), crime(Z,_,_)) ;
 		   (administrador(Z,NIF2), crime(Z,_,_)) )), R),
 	comprimento(R,0)).
@@ -397,9 +403,9 @@
 % * possuir valor <= 5.000 euros, * valido para todos os 
 % contrato exceto empreitadas de obras publicas, * prazo
 % de vigencia maximo de 1 ano.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,_,_,Tc,'ajuste direto',_,Val,Pr,_,Dt),
+		( contrato(ID,_,_,_,Tc,'ajuste direto',_,Val,Pr,_,Dt),
 		  ((Val < 0 ; Val > 5000) ;
 		   (Tc == 'empreitadas de obras publicas') ;
 		   (Pr < 0 ; Pr > 365))  ), R),
@@ -410,9 +416,9 @@
 % * possuir valor <= 100.000 euros, * so valido para contra-
 % tos de empreitadas de obras publicas, * so podem estar en-
 % volvidas empresas, * prazo maximo de 2 anos.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,NIF1,NIF2,Tc,'consulta previa',_,Val,Pr,_,Dt) ,
+		( contrato(ID,_,NIF1,NIF2,Tc,'consulta previa',_,Val,Pr,_,Dt) ,
 		  ((Val < 0 ; Val > 100000) ;
 		   (Tc \== 'empreitadas de obras publicas') ;
 		   (pessoa(NIF1,_,_) ; pessoa(NIF2,_,_)) ;
@@ -422,9 +428,9 @@
 % ---- 7) Contratos "concurso publico" devem:
 % * possuir valor <= 200.000 euros, * prazo maximo de 5 
 % anos.
-+contrato(_,_,_,_,_,_,_,_,_,_)::(
++contrato(_,_,_,_,_,_,_,_,_,_,_,_,_,_)::(
 	solucoes(ID,
-		( contrato(ID,_,_,Tc,'concurso publico',_,Val,Pr,_,Dt) ,
+		( contrato(ID,_,_,_,Tc,'concurso publico',_,Val,Pr,_,Dt) ,
 		  ((Val < 0 ; Val > 200000) ;
 		   (Pr < 0 ; Pr > 1825))  ), R),
 	comprimento(R,0)).
