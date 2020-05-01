@@ -466,14 +466,14 @@ sumAux([(_,V)|T], R) :-
 	sumAux(T,R1), R1 + V is R.
 
 +contrato(_,_,_,_,_,_,_,_,_,_,_)::(
-	solucoes(NIF,
-		(contrato(_,_,NIF,_,_,_,_,Vi,_,_,data(Y,_,_)),
-		 Y - 2 is Yo,
-		 solucoes((NIFe,Val),
-		 	(contrato(_,_,NIF,NIFe,_,_,_,Val,_,_,Dt2) ,
+	solucoes((NIF1,NIF2),
+		(contrato(_,_,NIF1,NIF2,_,_,_,Vi,_,_,data(Y,_,_)),
+		 Yo is Y - 2,
+		 solucoes(Val,
+		 	(contrato(_,_,NIF1,NIF2,_,_,_,Val,_,_,Dt2) ,
 		 	 dataEm(Dt2,Yo,Y) ), R1),
 		 sumAux(R1,Vt),
-		 Vt - Vi is VF,
+		 VF is Vt - Vi,
 		 VF >= 75000) , R2),
 	comprimento(R2,0)).
 
