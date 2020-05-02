@@ -28,81 +28,82 @@
 
 % 1) Pessoa.
 
-pessoa(001,'Roberto Dias','Rua Calma, nº 1').
-pessoa(002,'Adolfo Monteiro','Rua Calma, nº 2').
-pessoa(003,'Rudolfo Monteiro','Rua Calma, nº 3').
-pessoa(004,'Rudolfo Dias','Rua Calma, nº 4').
-pessoa(005,'Dominic Torreto','Rua Furiosa, nº 10').
-pessoa(006,'Pastor Dias','Rua Curiosa, nº 5').
-pessoa(007,'Luke Skywalker','Tatooine, nº 301').
-pessoa(008,'Chuck Silva','Rua do Chuck, nº 000').
-pessoa(009,'Manuel Moreira','Travessa de Cima, nº 101').
-pessoa(010,'Ric Fazeres', 'Rua do Travesseiro Crocante, nº 55').
+?- addPessoa(001,'Roberto Dias','Rua Calma, nº 1').
+?- addPessoa(002,'Adolfo Monteiro','Rua Calma, nº 2').
+?- addPessoa(003,'Rudolfo Monteiro','Rua Calma, nº 3').
+?- addPessoa(004,'Rudolfo Dias','Rua Calma, nº 4').
+?- addPessoa(005,'Dominic Torreto','Rua Furiosa, nº 10').
+?- addPessoa(006,'Pastor Dias','Rua Curiosa, nº 5').
+?- addPessoa(007,'Luke Skywalker','Tatooine, nº 301').
+?- addPessoa(008,'Chuck Silva','Rua do Chuck, nº 000').
+?- addPessoa(009,'Manuel Moreira','Travessa de Cima, nº 101').
+?- addPessoa(010,'Ric Fazeres', 'Rua do Travesseiro Crocante, nº 55').
+?- addPessoa(011,'Sr Amares','Rua do Padre').
 
 % 2) Empresa.
 
-empresa(100,'Parafusos, lda','Rua Calma, nº 1').
-empresa(101,'Pregos, lda','Rua Calma, nº 2').
-empresa(102,'Tabuas, lda','Rua Calma, nº 3').
-empresa(103,'Areias, lda','Rua Calma, nº 4').
-empresa(104,'Rochas, lda','Rua Calma, nº 5').
-empresa(105,'Zeca Panados', 'Bairro de Santa tecla, nº6').
-empresa(106,'PoBranco, lda', 'Avenida de Amarante, nº7').
-empresa(107,'Maria Bolacha, lda', 'Zona Industral Madeira, nº34').
-empresa(108,'Kebab Turco', 'Avenida Principal, nº14').
-empresa(109,'Seguros, lda', 'Rua do Padre, nº34').
+?- addEmpresa(100,'Parafusos, lda','Rua Calma, nº 1').
+?- addEmpresa(101,'Pregos, lda','Rua Calma, nº 2').
+?- addEmpresa(102,'Tabuas, lda','Rua Calma, nº 3').
+?- addEmpresa(103,'Areias, lda','Rua Calma, nº 4').
+?- addEmpresa(104,'Rochas, lda','Rua Calma, nº 5').
+?- addEmpresa(105,'Zeca Panados', 'Bairro de Santa tecla, nº6').
+?- addEmpresa(106,'PoBranco, lda', 'Avenida de Amarante, nº7').
+?- addEmpresa(107,'Maria Bolacha, lda', 'Zona Industral Madeira, nº34').
+?- addEmpresa(108,'Kebab Turco', 'Avenida Principal, nº14').
+?- addEmpresa(109,'Seguros, lda', 'Rua do Padre, nº34').
 
 % 3) Crime.
 
 % ---- 1) Pessoas.
-crime(007, data(3000,10,10), data(5000,10,10)).
-crime(010, data(2011,07,23), data(2021,08,02)).
+?- addCrime(007, data(3000,10,10), data(5000,10,10)).
+?- addCrime(010, data(2011,07,23), data(2021,08,02)).
 
 % ---- 2) Empresas.
-crime(106, data(1990,12,03), data(2000,12,03)).
-crime(109, data(2008,10,02), data(2015,11,25)).
+?- addCrime(106, data(1990,12,03), data(2000,12,03)).
+?- addCrime(109, data(2008,10,02), data(2015,11,25)).
 
 % 4) Interdito.
 
-interdito(001, data(1990,10,10), data(2010,10,10)).
-interdito(008, data(2015,08,15), data(2025,09,20)).
-interdito(006, data(2020,09,20), data(2030,10,17)).
+?- addInterdito(001, data(1990,10,10), data(2010,10,10)).
+?- addInterdito(008, data(2015,08,15), data(2025,09,20)).
+?- addInterdito(006, data(2020,09,20), data(2030,10,17)).
 
 % 5) Inabilitado.
 
-inabilitado(005).
+?- addInabilitado(005).
 
 % 6) Administrador.
 
-administrador(010,104).
-administrador(009,107).
-administrador(004,108).
+?- addAdministrador(010,104).
+?- addAdministrador(009,107).
+?- addAdministrador(004,108).
 
 % 7) Fiscal.
 
-fiscal(002).
-fiscal(003).
-
-% 7.1) Fiscaliza.
-
-fiscaliza(002, 1, data(2016,10,10)).
-fiscaliza(003, 2, data(2021,07,07)).
+?- addFiscal(002).
+?- addFiscal(003).
 
 % 8) Sub-empresa.
 
-subempresa(105, 106).
-subempresa(103, 106).
-subempresa(100, 109).
+?- addSubempresa(105, 106).
+?- addSubempresa(103, 106).
+?- addSubempresa(100, 109).
 
 % 9) Contrato.
 
-addContrato(1,1,007,106,'empreitadas de obras publicas',
-	        'consulta previa','luke comprou 100g de po',
+?- addContrato(1,1,007,106,'empreitadas de obras publicas',
+	        'concurso publico','luke comprou 100g de po',
 	        1000, 200, 'Amarante', data(2015,10,10)).
 
-addContrato(2,1,002,105,'aquisicao de servicos',
+?- addContrato(2,1,001,105,'locacao de bens moveis',
 			'ajuste direto','servicos basicos',
-			2000, 100, 'Lisboa', data(2020,05,05)).
+			2000, 100, 'Lisboa', data(2011,10,10)).
+
+% 7.1) Fiscaliza.
+
+?- addFiscaliza(002, 1, data(2016,10,10)).
+?- addFiscaliza(003, 2, data(2016,10,10)).
 
 
 % #########################################################
@@ -157,6 +158,6 @@ excecao(crime(3,'1994-04-24',Df)).
 
 
 % 9) Contrato.
-contrato(1,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto','2020-04-28').
-excecao(contrato(IDC,V,_,IDA,_,_,_,_,_,_,_)):-contrato(IDC,V,_,confidencial,_,_,_,_,_,_,_).
+%contrato(3,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto','2020-04-28').
+%excecao(contrato(IDC,V,_,IDA,_,_,_,_,_,_,_)):-contrato(IDC,V,_,confidencial,_,_,_,_,_,_,_).
 % #########################################################

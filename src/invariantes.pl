@@ -240,18 +240,17 @@ nulo(confidencial).
 
 % ---- 1) Pessoas apenas podem estar envolvidas num maximo
 % de 3 contratos anualmente.
-+contrato(_,_,_,_,_,_,_,_,_,_,_)::(
+contratosEnvolvidos(NIF,Y,R) :-
 	solucoes(ID,
-		( (contrato(ID,_,NIF,_,_,_,_,_,_,_,data(Y,_,_)) ;
-		   contrato(ID,_,_,NIF,_,_,_,_,_,_,data(Y,_,_)) ) ,
-		 pessoa(NIF),
-		 solucoes(IDN,
-		 	( (contrato(IDN,_,NIF,_,_,_,_,_,_,_,Dt2) ;
-		 	   contrato(IDN,_,_,NIF,_,_,_,_,_,_,Dt2)),
-		 	   dataEm(Dt2,Y) ), R1),
-		 comprimento(R1,N1),
-		 N1 > 3) , R2),
-	comprimento(R2,0)).
+		(contrato(ID,_,NIF,_,_,_,_,_,_,_,data(Y,_,_)) ;
+		 contrato(ID,_,_,NIF,_,_,_,_,_,_,data(Y,_,_))), R).
+
++contrato(_,_,_,_,_,_,_,_,_,_,data(Y,_,_))::(
+	solucoes(NIF, (
+		pessoa(NIF,_,_),
+		contratosEnvolvidos(NIF,Y,R),
+		comprimento(R,N), N > 3), R),
+	comprimento(R,0)).
 
 % 2) Empresa.
 
@@ -350,7 +349,7 @@ nulo(confidencial).
 
 % ---- 2) So pode haver um fiscal responsavel por
 % cada contrato.
-+fiscaliza(_,_,_)::(
++fiscaliza(_,ID,_)::(
 	solucoes(ID,
 		(fiscaliza(_,ID,_)), R),
 	comprimento(R,1)).
