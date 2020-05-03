@@ -462,14 +462,15 @@ contratosEnvolvidos(NIF,Y,R) :-
 % ratos ja celebrados for >= 75.000 euros.
 sumAux([],0).
 sumAux([(_,V)|T], R) :-
-	sumAux(T,R1), R1 + V is R.
+	sumAux(T,R1), R is R1 + V.
 
 +contrato(_,_,_,_,_,_,_,_,_,_,_)::(
-	solucoes((NIF1,NIF2),
-		(contrato(_,_,NIF1,NIF2,_,_,_,Vi,_,_,data(Y,_,_)),
+	solucoes(ID,
+		(contrato(ID,_,NIF1,NIF2,Tc,Tp,_,Vi,_,_,data(Y,_,_)),
 		 Yo is Y - 2,
-		 solucoes(Val,
-		 	(contrato(_,_,NIF1,NIF2,_,_,_,Val,_,_,Dt2) ,
+		 empresa(NIF2,_,_),
+		 solucoes((ID2,Val),
+		 	(contrato(ID2,_,NIF1,NIF2,Tc,Tp,_,Val,_,_,Dt2) ,
 		 	 dataEm(Dt2,Yo,Y) ), R1),
 		 sumAux(R1,Vt),
 		 VF is Vt - Vi,
