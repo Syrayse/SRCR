@@ -113,51 +113,188 @@
 
 % 1) Pessoa.
 
-% # Sabemos o NIF destas pessoas, no entanto a sua morada é desconhecida.
-excecao(pessoa(010,'Alberto Dias',morada)).
-excecao(pessoa(011,'Rodolfo Dias',morada)).
+% CONHECIMENTO INCERTO.
 
-% # Devido ao mau preenchimento de um formulário o NIF ficou como ultimo caracter apagado
-excecao(pessoa(n,'Manuel Silva','Rua do Lado, nº 23')) :- n >= 090, n =< 099.
+% ---- 1) O Alberto foi inserido no sistema, porem a sua 
+% morada e desconhecida.
+pessoa(015,'Alberto Dias',morada00).
+excecao(pessoa(N,Na,Mo)) :-
+	pessoa(N,Na,morada00).
+
+% ---- 2) O Rodolfo foi inserido no sistema, porem a sua 
+% morada e desconhecida.
+pessoa(016,'Rodolfo Dias',morada01).
+excecao(pessoa(N,Na,Mo)) :-
+	pessoa(N,Na,morada01).
+
+% ---- 3) Existe uma pessoa em Ermesinde que esta envolvida
+% em muitas contratos, porem devido a um erro informatico
+% o nome desta pessoa foi perdido, porém sabe-se que o nome
+% dessa pessoa certamente nem é 'Pedro' ou 'Rodrigo'.
+-pessoa(017,'Pedro','Ermesinde').
+-pessoa(017,'Rodrigo','Ermesinde').
+pessoa(017,nome00,'Ermesinde').
+excecao(pessoa(N,Na,Mo)) :-
+	pessoa(N,nome00,Mo).
+
+% CONHECIMENTO IMPRECISO.
+
+% ---- 4) Sabe-se que o Rui possui o NIF 18, porem nao se
+% sabe se ele mora na madeira ou em lisboa.
+excecao( pessoa(018,'Rui','Madeira') ).
+excecao( pessoa(018,'Rui','Lisboa') ).
+
+% ---- 5) Sabe-se que existe uma pessoa com o NIF 19 que mora
+% em Barcelos, nao se sabe o nome ao certo. Porem, sabe-se que
+% o nome dessa pessoa esta, alfabeticamente, entre 'Filipe' e
+% 'Paulo'.
+excecao( pessoa(019,Nome01,'Barcelos') ) :-
+	Nome01 @>= 'Filipe', Nome01 @=< 'Paulo'.    %>
+
+% ---- 6) Sabe-se que o NIF 20 chama-se 'Pedro' e mora em Lisboa.
+% Porem, suspeita-se que na realidade o NIF 20 tenha indicado
+% uma identidade falsa, e que na verdade o verdadeiro nome comeca
+% com R.
+pessoa(020,'Pedro','Lisboa').
+excecao( pessoa(020,N,'Lisboa') ) :-
+	N @>= 'R', N @< 'S'.
+
+% CONHECIMENTO INTERDITO.
+
+% ---- 7) Sabe-se que existe um individuo com o NIF 21, porem
+% esta pessoa usufrui de protecao diplomatica, pelo que o
+% seu nome e morada sao totalmente desconhidos, e nunca podem
+% ser conhecidos.
+pessoa(021,nome02,morada02).
+excecao(pessoa(N,Na,Mo)) :-
+	pessoa(N,nome02,morada02).
+
+nulo(nome02).
+nulo(morada02).
+
++pessoa(_,_,_)::(
+	solucoes((Nome,Morada),
+		(pessoa(021,Nome,Morada),
+		 nao(nulo(Nome)),
+		 nao(nulo(Morada))), R),
+	comprimento(R,0)).
 
 % 2) Empresa.
 
-% # Devido a um erro no sistema algumas empresas viram alguns numeros do NIF apagados
-excecao(empresa(n,'Empresa, lda','Rua de Cima, nº 3')) :- n >= 105, n =< 106.
-excecao(empresa(n,'Negocios, lda','Rua de Cima, nº 1')) :- n >= 107, n =< 110.
-excecao(empresa(n,'Hermanos, lda','Rua de Baixo, nº 3')) :- n >= 111, n =< 115.
+% CONHECIMENTO INCERTO.
 
-% # Devido à falta de organização ninguém sabe ao certo a morada destas empresas
-excecao(empresa(116,'Software, lda',morada)).
-excecao(empresa(117,'Hardware, lda',morada)).
+% ---- 1) A empresa 'Kebabz' com NIF 122 esta inserida
+% num local desconhido, pelo que nao se sabe a sua morada.
+% Porem, sabe-se que nao e em Lisboa.
+-empresa(122,'Kebabz','Lisboa').
+empresa(122,'Kebabz',morada10).
+excecao(empresa(N,Na,Mo)) :-
+	empresa(N,Na,morada10).
+
+% CONHECIMENTO IMPRECISO.
+
+% ---- 2) Existe uma empresa no Porto com um nome desconhecido
+% porem, sabe-se que este nome certamente nao começa com 'A' ou
+% 'B'.
+-empresa(123,Nome10,'Porto') :-
+	Nome10 @>= 'A', Nome10 @< 'C'.
+empresa(123,nome10,'Porto').
+excecao( empresa(N,Na,Mo) ) :-
+	empresa(N,nome10,Mo).
+
+% CONHECIMENTO INTERDITO.
+
+% ---- 3) Existe uma empresa sediada em Malta, porem, como esta
+% sediada num paraiso fiscal, o seu nome e desconhedio. E
+% nunca podera vir a ser conhecido.
+
+empresa(124,nome11,'Malta').
+excecao(empresa(N,Na,Mo)) :-
+	empresa(N,nome11,Mo).
+
+nulo(nome11).
+
++empresa(_,_,_)::(
+	solucoes((Nome,Morada),
+		(empresa(124,Nome,'Malta'),
+		 nao(nulo(Nome))), R),
+	comprimento(R,0)).
+
 
 % 3) Crime.
 
-% # Devido a um erro de cálculo ninguém sabe ao certo quando terminam estes crimes
-excecao(crime(1,'2020-02-17',Df)).
-excecao(crime(2,'2020-01-10',Df)).
-excecao(crime(3,'1994-04-24',Df)).
+% ---- 1) Sabe-se que a data de fim de uma pena, certamente
+% nao e superior a sua data de inicio.
+-crime(_,data(Y1,_,_),data(Y2,_,_)) :-
+	Y1 > Y2.
 
+% CONHECIMENTO INCERTO.
+
+% ---- 2) Sabe-se que a pessoa com o NIF 15 foi condenado em
+% 2100-10-10, porem por erro juridico, nao se sabe qual sera
+% a data final da pena.
+crime(015, data(2100,10,10), data(y0,m0,d0)).
+excecao(crime(N,Di,Df)) :-
+	crime(N,Di, data(y0,m0,d0)).
+
+% CONHECIMENTO IMPRECISO.
+
+% ---- 3) Sabe-se que a empresa com nif 124 foi condenada
+% numa qualquer data entre o ano de 2100 e 2120.
+excecao( crime(124,data(Y1,_,_),data(Y2,_,_)) ) :-
+	Y1 >= 2100, Y2 =< 2120.             % >
+
+% CONHECIMENTO INTERDITO.
+
+% ---- 4) Sabe-se que a empresa com nif 123 foi condenada
+% a prepetua na data de 2200, pelo que devera impossivel indicar
+% a data de fim de pena, pois nao existe.
+
+crime(123,data(2200,10,10),data(y1,m1,d1)).
+excecao(crime(N,Di,Df)) :-
+	crime(N,Di, data(y1,m1,d1)).
+
+nulo(y1).
+nulo(m1).
+nulo(d1).
+
++crime(_,_,_)::(
+	solucoes((Y,M,D),
+		(crime(123,_,data(Y,M,D)),
+		 nao(nulo(Y)),
+		 nao(nulo(M)),
+		 nao(nulo(D)) ), R),
+	comprimento(R,0)).
 
 % 4) Interdito.
 
+% NENHUM
 
 % 5) Inabilitado.
 
+% NENHUM
 
 % 6) Administrador.
 
+% NENHUM
 
 % 7) Fiscal.
 
+% NENHUM
 
 % 7.1) Fiscaliza.
 
+% NENHUM
 
 % 8) Sub-empresa.
 
+% NENHUM
 
 % 9) Contrato.
-%contrato(3,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto','2020-04-28').
-%excecao(contrato(IDC,V,_,IDA,_,_,_,_,_,_,_)):-contrato(IDC,V,_,confidencial,_,_,_,_,_,_,_).
+
+% ---- 1) Contrato confidencial declarado pelo adjudicante
+% 006.
+contrato(3,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto','2020-04-28').
+excecao(contrato(IDC,V,_,IDA,_,_,_,_,_,_,_)):-
+	contrato(IDC,V,_,confidencial,_,_,_,_,_,_,_).
 % #########################################################
