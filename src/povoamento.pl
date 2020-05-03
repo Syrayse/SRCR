@@ -1,6 +1,6 @@
 % #########################################################
 % ## SRCR - Dominio de Contratacao Publica.              ##
-% ## Desenvolvido pelo grupo de trabalho nº 10.          ##
+% ## Desenvolvido pelo grupo de trabalho n  10.          ##
 % ## Ano letivo 2019/20 - MIEI.                          ##
 % ##                                                     ##
 % ## --------------------------------------------------- ##
@@ -14,13 +14,6 @@
 % ## ao seu respetivo teste.                             ##
 % ##                                                     ##
 % ## NIFS 000 -> 099 : pessoas | 100 -> 199 : empresas   ##
-% ##                                                     ##
-% ## --------------------------------------------------- ##
-% ## RESUMO DO POVOAMENTO AQUI CONTIDO:                  ##
-% ##       *) 10 Pessoas.                                ##
-% ##       *) 10 Empresa.                                ##
-% ##       *) 10 Pessoas.                                ##
-% ##       *) 10 Pessoas.                                ##
 % #########################################################
 
 % #########################################################
@@ -28,30 +21,30 @@
 
 % 1) Pessoa.
 
-?- addPessoa(001,'Roberto Dias','Rua Calma, nº 1').
-?- addPessoa(002,'Adolfo Monteiro','Rua Calma, nº 2').
-?- addPessoa(003,'Rudolfo Monteiro','Rua Calma, nº 3').
-?- addPessoa(004,'Rudolfo Dias','Rua Calma, nº 4').
-?- addPessoa(005,'Dominic Torreto','Rua Furiosa, nº 10').
-?- addPessoa(006,'Pastor Dias','Rua Curiosa, nº 5').
-?- addPessoa(007,'Luke Skywalker','Tatooine, nº 301').
-?- addPessoa(008,'Chuck Silva','Rua do Chuck, nº 000').
-?- addPessoa(009,'Manuel Moreira','Travessa de Cima, nº 101').
-?- addPessoa(010,'Ric Fazeres', 'Rua do Travesseiro Crocante, nº 55').
+?- addPessoa(001,'Roberto Dias','Rua Calma, n 1').
+?- addPessoa(002,'Adolfo Monteiro','Rua Calma, n 2').
+?- addPessoa(003,'Rudolfo Monteiro','Rua Calma, n 3').
+?- addPessoa(004,'Rudolfo Dias','Rua Calma, n 4').
+?- addPessoa(005,'Dominic Torreto','Rua Furiosa, n 10').
+?- addPessoa(006,'Pastor Dias','Rua Curiosa, n 5').
+?- addPessoa(007,'Luke Skywalker','Tatooine, n 301').
+?- addPessoa(008,'Chuck Silva','Rua do Chuck, n 000').
+?- addPessoa(009,'Manuel Moreira','Travessa de Cima, n 101').
+?- addPessoa(010,'Ric Fazeres', 'Rua do Travesseiro Crocante, n 55').
 ?- addPessoa(011,'Sr Amares','Rua do Padre').
 
 % 2) Empresa.
 
-?- addEmpresa(100,'Parafusos, lda','Rua Calma, nº 1').
-?- addEmpresa(101,'Pregos, lda','Rua Calma, nº 2').
-?- addEmpresa(102,'Tabuas, lda','Rua Calma, nº 3').
-?- addEmpresa(103,'Areias, lda','Rua Calma, nº 4').
-?- addEmpresa(104,'Rochas, lda','Rua Calma, nº 5').
-?- addEmpresa(105,'Zeca Panados', 'Bairro de Santa tecla, nº6').
-?- addEmpresa(106,'PoBranco, lda', 'Avenida de Amarante, nº7').
-?- addEmpresa(107,'Maria Bolacha, lda', 'Zona Industral Madeira, nº34').
-?- addEmpresa(108,'Kebab Turco', 'Avenida Principal, nº14').
-?- addEmpresa(109,'Seguros, lda', 'Rua do Padre, nº34').
+?- addEmpresa(100,'Parafusos, lda','Rua Calma, n 1').
+?- addEmpresa(101,'Pregos, lda','Rua Calma, n 2').
+?- addEmpresa(102,'Tabuas, lda','Rua Calma, n 3').
+?- addEmpresa(103,'Areias, lda','Rua Calma, n 4').
+?- addEmpresa(104,'Rochas, lda','Rua Calma, n 5').
+?- addEmpresa(105,'Zeca Panados', 'Bairro de Santa tecla, n6').
+?- addEmpresa(106,'PoBranco, lda', 'Avenida de Amarante, n7').
+?- addEmpresa(107,'Maria Bolacha, lda', 'Zona Industral Madeira, n34').
+?- addEmpresa(108,'Kebab Turco', 'Avenida Principal, n14').
+?- addEmpresa(109,'Seguros, lda', 'Rua do Padre, n34').
 
 % 3) Crime.
 
@@ -129,8 +122,8 @@ excecao(pessoa(N,Na,Mo)) :-
 
 % ---- 3) Existe uma pessoa em Ermesinde que esta envolvida
 % em muitas contratos, porem devido a um erro informatico
-% o nome desta pessoa foi perdido, porém sabe-se que o nome
-% dessa pessoa certamente nem é 'Pedro' ou 'Rodrigo'.
+% o nome desta pessoa foi perdido, porem sabe-se que o nome
+% dessa pessoa certamente nem e 'Pedro' ou 'Rodrigo'.
 -pessoa(017,'Pedro','Ermesinde').
 -pessoa(017,'Rodrigo','Ermesinde').
 pessoa(017,nome00,'Ermesinde').
@@ -194,7 +187,7 @@ excecao(empresa(N,Na,Mo)) :-
 % CONHECIMENTO IMPRECISO.
 
 % ---- 2) Existe uma empresa no Porto com um nome desconhecido
-% porem, sabe-se que este nome certamente nao começa com 'A' ou
+% porem, sabe-se que este nome certamente nao comeca com 'A' ou
 % 'B'.
 -empresa(123,Nome10,'Porto') :-
 	Nome10 @>= 'A', Nome10 @< 'C'.
