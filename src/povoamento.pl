@@ -294,7 +294,7 @@ nulo(d1).
 
 % ---- 1) Contrato confidencial declarado pelo adjudicante
 % 006.
-contrato(3,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto','2020-04-28').
+contrato(3,1,006,confidencial,'confidencialidade','sigilo','Pastor Dias garante nao divulgar identidade do investidor da sua empresa',10000,18250,'Rua Santa Catarina, Porto',data(2020,04,28)).
 excecao(contrato(IDC,V,_,IDA,_,_,_,_,_,_,_)):-
 	contrato(IDC,V,_,confidencial,_,_,_,_,_,_,_).
 % #########################################################
